@@ -1,0 +1,36 @@
+2025-08-10T13:04:25.286261	176	https://link.springer.com/article/10.1007/s10460-024-10672-2	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/article/10.1007/s10460-024-10672-2
+Call log:
+  - navigating to "https://link.springer.com/article/10.1007/s10460-024-10672-2", waiting until "domcontentloaded"
+
+2025-08-10T13:04:25.292005	175	https://link.springer.com/article/10.1007/s00068-025-02859-x	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/article/10.1007/s00068-025-02859-x
+Call log:
+  - navigating to "https://link.springer.com/article/10.1007/s00068-025-02859-x", waiting until "domcontentloaded"
+
+2025-08-10T13:04:25.296848	177	https://link.springer.com/article/10.1038/s43856-025-00992-7	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/article/10.1038/s43856-025-00992-7
+Call log:
+  - navigating to "https://link.springer.com/article/10.1038/s43856-025-00992-7", waiting until "domcontentloaded"
+
+2025-08-10T13:04:27.022435	180	https://link.springer.com/article/10.1186/s12961-025-01342-8	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/article/10.1186/s12961-025-01342-8
+Call log:
+  - navigating to "https://link.springer.com/article/10.1186/s12961-025-01342-8", waiting until "networkidle"
+
+2025-08-10T13:04:27.027696	179	https://link.springer.com/article/10.1007/s12672-024-01332-2	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/article/10.1007/s12672-024-01332-2
+Call log:
+  - navigating to "https://link.springer.com/article/10.1007/s12672-024-01332-2", waiting until "networkidle"
+
+2025-08-10T13:04:27.031354	178	https://link.springer.com/chapter/10.1007/978-3-031-63272-3_4	Page.goto: net::ERR_INTERNET_DISCONNECTED at https://link.springer.com/chapter/10.1007/978-3-031-63272-3_4
+Call log:
+  - navigating to "https://link.springer.com/chapter/10.1007/978-3-031-63272-3_4", waiting until "networkidle"
+
+2025-08-12T22:08:05.491737	5	https://link.springer.com/article/10.1007/s13748-025-00375-y	Page.goto: net::ERR_NETWORK_IO_SUSPENDED at https://link.springer.com/article/10.1007/s13748-025-00375-y
+Call log:
+  - navigating to "https://link.springer.com/article/10.1007/s13748-025-00375-y", waiting until "domcontentloaded"
+
+2025-08-15T23:45:39.522424	156	https://link.springer.com/article/10.1186/s12913-025-13107-8	Page.goto: net::ERR_ABORTED at https://link.springer.com/article/10.1186/s12913-025-13107-8
+Call log:
+  - navigating to "https://link.springer.com/article/10.1186/s12913-025-13107-8", waiting until "networkidle"
+
+2025-08-16T00:13:12.292928	60	https://link.springer.com/article/10.1007/s10805-025-09664-6	Page.goto: Page crashed
+Call log:
+  - navigating to "https://link.springer.com/article/10.1007/s10805-025-09664-6", waiting until "networkidle"
+
