@@ -4,14 +4,4 @@ google-generativeai
 sentence-transformers
 python-dotenv
 requests
-pytz
 Django
-huggingface_hub
-
-# Required for sentence-transformers
-torch
-numpy
-
-# HTTP and networking
-urllib3
-certifi
