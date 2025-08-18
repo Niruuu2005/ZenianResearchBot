@@ -1,7 +1,6 @@
 # Core dependencies
 python-telegram-bot[job-queue]
 google-generativeai
-pinecone-client
 sentence-transformers
 python-dotenv
 requests
