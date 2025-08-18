@@ -4,12 +4,15 @@ import random
 import re
 import requests
 import time
+import asyncio
 import pytz
 from datetime import time as dt_time
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from dotenv import load_dotenv
 import google.generativeai as genai
 from pinecone import Pinecone
+from django.http import JsonResponse
+from django.urls import path
 
 from embedding_service import EmbeddingService
 from pinecone_client import PineconeQueryClient
@@ -61,6 +64,39 @@ GREETINGS = [
     "good morning", "good afternoon", "good evening",
     "bye", "goodbye", "see you", "take care"
 ]
+
+# API endpoint handler
+def endpoint(request):
+    if request.method == 'GET':
+        return JsonResponse({'status': 'active'})
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+# URL configuration for the endpoint
+urlpatterns = [
+    path('endpoint/', endpoint, name='endpoint'),
+]
+
+# Async function to poll the API
+async def poll_api(context):
+    BASE_URL = "https://zenianresearchbot.onrender.com"
+    API_URL = f"{BASE_URL}/endpoint/"
+    INTERVAL = 45  # Seconds between API calls
+    
+    while True:
+        try:
+            # Make API request
+            response = requests.get(API_URL)
+            response.raise_for_status()  # Raises exception for 4xx/5xx errors
+            logger.info(f"API call successful: {response.status_code}, Response: {response.json()}")
+            
+            # Wait for the specified interval
+            await asyncio.sleep(INTERVAL)
+            
+        except requests.RequestException as e:
+            logger.error(f"API call failed: {e}")
+            # Reset timer by immediately retrying
+            await asyncio.sleep(1)  # Brief pause before retry to avoid hammering
+            continue
 
 def is_greeting(query: str) -> bool:
     q_lower = query.lower()
@@ -358,13 +394,16 @@ def main():
         logger.error("JobQueue is not available. Please install 'python-telegram-bot[job-queue]' using 'pip install \"python-telegram-bot[job-queue]\"'")
         raise RuntimeError("JobQueue dependency is missing.")
     
-    # For testing: Send every 60 seconds (comment out when not testing)
-    # app.job_queue.run_repeating(send_research_spark, interval=60, first=10)
+    # Schedule daily research spark at 6 PM IST
+    app.job_queue.run_daily(
+        send_research_spark,
+        dt_time(18, 0, tzinfo=pytz.timezone('Asia/Kolkata'))
+    )
     
-    # For regular: Send daily at 6 PM IST (uncomment for production)
-    app.job_queue.run_daily(send_research_spark, dt_time(18, 0, tzinfo=pytz.timezone('Asia/Kolkata')))
+    # Schedule API polling every 45 seconds
+    app.job_queue.run_repeating(poll_api, interval=45, first=0)
     
-    logger.info("Telegram bot is running...")
+    logger.info("Telegram bot and API poller are running...")
     app.run_polling()
 
 if __name__ == "__main__":
