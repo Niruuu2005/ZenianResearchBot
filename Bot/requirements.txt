@@ -1,25 +1,18 @@
 # Core dependencies
-python-telegram-bot[job-queue]==20.7
-google-generativeai==0.3.2
-pinecone-client==2.2.4
-sentence-transformers==2.2.2
-python-dotenv==1.0.0
-requests==2.31.0
-pytz==2023.3
-Django>=3.2,<5.0
-huggingface_hub==0.8.1  # Pinned to avoid cached_download issue
+python-telegram-bot[job-queue]
+google-generativeai
+pinecone-client
+sentence-transformers
+python-dotenv
+requests
+pytz
+Django
+huggingface_hub
 
-# Additional dependencies for sentence-transformers
-torch>=1.9.0
-torchvision>=0.10.0
-torchaudio>=0.9.0
-numpy>=1.21.0
-scikit-learn>=1.0.0
-scipy>=1.7.0
+# Required for sentence-transformers
+torch
+numpy
 
 # HTTP and networking
-urllib3>=1.26.0
-certifi>=2021.5.25
-
-# Job scheduling (not used in this script, but included for completeness)
-APScheduler==3.10.4
+urllib3
+certifi
