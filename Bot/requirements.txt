@@ -5,3 +5,4 @@ sentence-transformers
 python-dotenv
 requests
 Django
+pytz
