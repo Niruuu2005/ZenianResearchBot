@@ -11,4 +11,4 @@ COPY Bot/ ./bot/
 RUN if [ -f bot/requirements.txt ]; then pip install --no-cache-dir -r bot/requirements.txt; fi
 
 # Set entrypoint to run query_pot.py
-CMD ["python", "bot/query_pot.py"]
+CMD ["python", "bot/query_bot.py"]
