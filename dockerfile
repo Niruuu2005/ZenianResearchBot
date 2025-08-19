@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy bot directory and all its files
-COPY bot/ ./bot/
+COPY Bot/ ./bot/
 
 # Install requirements if requirements.txt exists
 RUN if [ -f bot/requirements.txt ]; then pip install --no-cache-dir -r bot/requirements.txt; fi
