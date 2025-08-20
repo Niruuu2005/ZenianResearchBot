@@ -11,8 +11,6 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 from dotenv import load_dotenv
 import google.generativeai as genai
 from pinecone import Pinecone
-from django.http import JsonResponse
-from django.urls import path
 
 from embedding_service import EmbeddingService
 from pinecone_client import PineconeQueryClient
@@ -64,39 +62,6 @@ GREETINGS = [
     "good morning", "good afternoon", "good evening",
     "bye", "goodbye", "see you", "take care"
 ]
-
-# API endpoint handler
-def endpoint(request):
-    if request.method == 'GET':
-        return JsonResponse({'status': 'active'})
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-# URL configuration for the endpoint
-urlpatterns = [
-    path('endpoint/', endpoint, name='endpoint'),
-]
-
-# Async function to poll the API
-async def poll_api(context):
-    BASE_URL = "https://zenianresearchbot.onrender.com"
-    API_URL = f"{BASE_URL}/endpoint/"
-    INTERVAL = 45  # Seconds between API calls
-    
-    while True:
-        try:
-            # Make API request
-            response = requests.get(API_URL)
-            response.raise_for_status()  # Raises exception for 4xx/5xx errors
-            logger.info(f"API call successful: {response.status_code}, Response: {response.json()}")
-            
-            # Wait for the specified interval
-            await asyncio.sleep(INTERVAL)
-            
-        except requests.RequestException as e:
-            logger.error(f"API call failed: {e}")
-            # Reset timer by immediately retrying
-            await asyncio.sleep(1)  # Brief pause before retry to avoid hammering
-            continue
 
 def is_greeting(query: str) -> bool:
     q_lower = query.lower()
@@ -385,7 +350,28 @@ async def handle_query(update, context):
         disable_web_page_preview=True
     )
 
+async def health_check(context):
+    """
+    Optional health check function that logs bot status
+    This helps monitor if the bot is running properly
+    """
+    try:
+        # Simple health check - count active chats
+        active_chats = len(chat_ids)
+        logger.info(f"Bot health check: {active_chats} active chats")
+        
+        # Optional: Test Pinecone connection
+        try:
+            stats = await asyncio.to_thread(pinecone_index.describe_index_stats)
+            logger.info(f"Pinecone health: {stats.total_vector_count} vectors")
+        except Exception as e:
+            logger.warning(f"Pinecone health check failed: {e}")
+            
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+
 def main():
+    logger.info("Starting Telegram bot...")
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_query))
@@ -400,10 +386,10 @@ def main():
         dt_time(18, 0, tzinfo=pytz.timezone('Asia/Kolkata'))
     )
     
-    # Schedule API polling every 45 seconds
-    app.job_queue.run_repeating(poll_api, interval=45, first=0)
+   # Add health check every 10 minutes (600 seconds)
+    app.job_queue.run_repeating(health_check, interval=600, first=60)
     
-    logger.info("Telegram bot and API poller are running...")
+    logger.info("Telegram bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
